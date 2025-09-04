@@ -6,7 +6,7 @@ const { mapDBToModel } = require('../../utils');
 
 class NotesService {
   constructor() {
-    this._pool = new Poll();
+    this._pool = new Pool();
   }
 
   async addNote({ title, body, tags }) {
@@ -38,7 +38,7 @@ class NotesService {
   async getNoteById(id) {
     const query = {
       text: 'SELECT * FROM notes WHERE id = $1',
-      value: [id],
+      values: [id],
     };
     const result = await this._pool.query(query);
     if (!result.rows.length) {
@@ -50,13 +50,15 @@ class NotesService {
   async editNoteById(id, { title, body, tags }) {
     const updateAt = new Date().toISOString();
     const query = {
-      text: 'UPDATE notes SET title = $1, body = $2, tags = $3, updateAt = $4 WHERE ID = $5 RETURNING id',
+      text: 'UPDATE notes SET title = $1, body = $2, tags = $3, update_at = $4 WHERE id = $5 RETURNING id',
       values: [title, body, tags, updateAt, id],
     };
     const result = await this._pool.query(query);
     if (!result.rows.length) {
       throw new NotFoundError('Gagal memperbarui catatan. Id tidak ditemukan');
     }
+    const res = await this.getNoteById(id);
+    return res;
   }
 
   async deleteNoteById(id) {
@@ -64,7 +66,7 @@ class NotesService {
       text: 'DELETE FROM notes WHERE id = $1 RETURNING id',
       values: [id],
     };
-    const result = this._pool.query(query);
+    const result = await this._pool.query(query);
     if (!result.rows.length) {
       throw new NotFoundError('Catatan gagal dihapus. Id tidak ditemukan');
     }

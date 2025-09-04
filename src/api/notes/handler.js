@@ -28,7 +28,7 @@ class NotesHandler {
   }
 
   async getNotesHandler() {
-    const notes = await this._service.getNotes();
+    const notes = await this._service.getNote();
     return {
       status: 'success',
       data: {
@@ -51,10 +51,14 @@ class NotesHandler {
   async putNoteByIdHandler(request, h) {
     this._validator.validateNotePayload(request.payload);
     const { id } = request.params;
-    await this._service.editNoteById(id, request.payload);
+    console.log(id);
+    const note = await this._service.editNoteById(id, request.payload);
     return {
       status: 'success',
       message: 'Catatan berhasil diperbarui',
+      data: {
+        note,
+      },
     };
   }
 
