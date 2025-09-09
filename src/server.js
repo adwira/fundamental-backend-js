@@ -18,10 +18,10 @@ const CollaborationsService = require('./services/postgres/CollaborationsService
 const CollaborationsValidator = require('./validator/collaborations');
 
 const init = async () => {
+  const collaborationsService = new CollaborationsService();
   const notesService = new NotesService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
-  const collaborationsService = new CollaborationsService();
   const server = Hapi.server({
     port: process.env.port,
     host: process.env.host,
@@ -48,7 +48,7 @@ const init = async () => {
     validate: (artifacts) => ({
       isValid: true,
       credentials: {
-        id: artifacts.decode.payload.id,
+        id: artifacts.decoded.payload.id,
       },
     }),
   });
