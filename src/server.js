@@ -27,8 +27,8 @@ const init = async () => {
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
   const server = Hapi.server({
-    port: process.env.port,
-    host: process.env.host,
+    port: process.env.PORT,
+    host: process.env.HOST,
     // host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
     routes: {
       cors: {
