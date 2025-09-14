@@ -25,7 +25,7 @@ class CollaborationsHandler {
     return response;
   }
 
-  async deleteCollaborationHandler(request, h) {
+  async deleteCollaborationHandler(request) {
     this.validator.validateCollaborationPayload(request.payload);
     const { id: credentialId } = request.auth.credentials;
     const { noteId, userId } = request.payload;
